@@ -65,7 +65,7 @@ def liga_host(*hosts_vms):
         if host_existe(host_vm):
             if not host_is_ativo(host_vm):
                 cmd = '\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\" startvm ' + host_vm +' --type headless'
-                myCmd = os.popen(cmd).read() 
+                os.popen(cmd).read() 
                 print(f'Host virtual {host_vm} está sendo ligado...')
 
 @verbose
@@ -74,11 +74,23 @@ def desliga_host(*host_vms):
         if host_existe(host_vm) and host_is_ativo(host_vm):
             print (f'\nHost virtual {host_vm} está sendo preparado para o desligamento...!!')
             cmd = '\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\" controlvm ' + host_vm +' poweroff'
-            myCmd = os.popen(cmd).read() 
+            os.popen(cmd).read() 
             print(f'Host virtual {host_vm} foi desligado com sucesso!')
+
+
 
 if __name__ == '__main__':
     operações = {'liga': 'liga',
                 'desliga': 'desliga', 
                 }
+    # operações(liga_host[args.liga])
     # print(operações[args.operação](args.x, args.y))
+
+# print('liga_host([args.liga_host])')
+# host_is_ativo('eclipse810w0')
+# lista_host_ativos()
+
+
+
+
+
