@@ -7,15 +7,16 @@ parser = ArgumentParser(prog='virtualbox-cmd cli',
                         description='VirtualBox commandline - programa para manipular hosts virtuais',  # NOQA
                         fromfile_prefix_chars='@')
 
-parser.add_argument('operacao', choices=['liga', 'desliga', 'lista', 'ativo'],
+parser.add_argument('operacao', choices=['liga', 'desliga', 'lista', 'ativo', 'existe'],
                     help='''
                     liga: Liga a(s) VM passada no parâmetro;
                     desliga: Desliga a(s) VM passada no parâmetro;
                     lista: Lista as VMs existentes;
                     ativo: Verifica quais VMs estão ativas
+                    existe: Verifica se VM existe;
                     ''')
 
-parser.add_argument('--host', action='store',
+parser.add_argument('--host', action='append', 
                     help='VM a ser manipulada no VirtualBox')
 
 parser.add_argument('-v', '--verbose', action='count',
@@ -50,6 +51,7 @@ def host_existe(host_vm):
     cmd = popen(cmd).read()
     cmd_lista = cmd.split('\"')
     if host_vm in cmd_lista:
+        # print(f'Host virtual {host_vm} existe!')
         return True
     else:
         print(f'Host virtual {host_vm} não existe!')
@@ -95,12 +97,15 @@ def liga_host(*hosts_vms):
     args:
     host_vms - Nome da máquina virtual
     """
+    print(type(hosts_vms))
+    host
     for host_vm in hosts_vms:
         if host_existe(host_vm):
             if not host_is_ativo(host_vm):
                 cmd = '\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\" startvm ' + host_vm + ' --type headless'
                 popen(cmd).read()
-                return f'Host virtual {host_vm} está sendo ligado...'
+                print(f'Host virtual {host_vm} está sendo ligado...')
+                # return f'Host virtual {host_vm} está sendo ligado...'
 
 
 @verbose
@@ -116,7 +121,8 @@ def desliga_host(*host_vms):
             print(f'Host virtual {host_vm} está sendo preparado para o desligamento...!!')
             cmd = '\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\" controlvm ' + host_vm + ' poweroff'
             popen(cmd).read()
-            return f'Host virtual {host_vm} foi desligado com sucesso!'
+            print(f'Host virtual {host_vm} foi desligado com sucesso!')
+            # return f'Host virtual {host_vm} foi desligado com sucesso!'
 
 
 if __name__ == '__main__':
@@ -132,5 +138,7 @@ if __name__ == '__main__':
     if args.operacao == 'ativo':
         host_is_ativo(args.host)
 
+    if args.operacao == 'existe':
+        host_existe(args.host)
 # Windows: '\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\"
 # Linux: /usr/bin/vboxmanage
