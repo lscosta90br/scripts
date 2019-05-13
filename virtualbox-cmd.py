@@ -7,11 +7,12 @@ parser = ArgumentParser(prog='virtualbox-cmd cli',
                         description='VirtualBox commandline - programa para manipular hosts virtuais',  # NOQA
                         fromfile_prefix_chars='@')
 
-parser.add_argument('operacao', choices=['liga', 'desliga', 'lista', 'ativo', 'existe'],
+parser.add_argument('operacao', choices=['liga', 'desliga', 'lista', 'lista_todos', 'ativo', 'existe'],
                     help='''
                     liga: Liga a(s) VM passada no parâmetro;
                     desliga: Desliga a(s) VM passada no parâmetro;
-                    lista: Lista as VMs existentes;
+                    lista: Lista as VMs ativas;
+                    lista_todos: Lista as VMs ligadas;
                     ativo: Verifica quais VMs estão ativas
                     existe: Verifica se VM existe;
                     ''')
@@ -94,6 +95,14 @@ def lista_host_ativos():
     print('Lista de Hosts Virtuais Ativos:')
     return cmd
 
+@verbose
+def lista_todos_host():
+    """Lista máquinas virtuais ativas."""
+    cmd =  cmd_vboxmanage +' list vms'
+    cmd = popen(cmd).read()
+    print('Lista de todos os Hosts Virtuais:')
+    return cmd
+
 
 @verbose
 def liga_host(*hosts_vms):
@@ -148,4 +157,7 @@ if __name__ == '__main__':
         host_is_ativo(args.host)
 
     if args.operacao == 'existe':
+        host_existe(args.host)
+
+    if args.operacao == 'lista_todos':
         host_existe(args.host)
