@@ -1,0 +1,2 @@
+# deb-src http://download.virtualbox.org/virtualbox/debian bionic contrib
+deb http://download.virtualbox.org/virtualbox/debian bionic contrib
